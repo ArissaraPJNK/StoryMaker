@@ -1,6 +1,8 @@
 import streamlit as st
 from openai import OpenAI
 import pandas as pd
+from nltk import pos_tag, word_tokenize
+from nltk.corpus import wordnet
 
 # ตั้งค่า Sidebar
 st.sidebar.title("NLP Story Generator")
@@ -43,43 +45,45 @@ if st.button("สร้างนิทาน"):
             )
             story_english = response_english.choices[0].message.content
 
+            # วิเคราะห์คำศัพท์
+            def get_vocabulary_analysis(text):
+                # Tokenize และแท็กคำศัพท์
+                tokens = word_tokenize(text)
+                pos_tags = pos_tag(tokens)
+
+                # เลือกคำศัพท์ที่เป็นระดับ A2 ขึ้นไป (สมมุติว่าระบุคำด้วยเงื่อนไขนี้)
+                vocabulary = []
+                for word, tag in pos_tags:
+                    # ตัวอย่างการคัดกรอง (ปรับแต่งได้)
+                    if len(word) > 3:  # สมมุติว่าใช้ความยาว > 3 เป็นตัวกรอง
+                        word_translation_prompt = f"Translate this English word into Thai: {word}"
+                        translation_response = client.chat.completions.create(
+                            model="gpt-4o-mini",
+                            messages=[{"role": "user", "content": word_translation_prompt}]
+                        )
+                        thai_translation = translation_response.choices[0].message.content
+                        vocabulary.append({"Word": word, "POS": tag, "Translation": thai_translation})
+
+                return pd.DataFrame(vocabulary)
+
+            vocab_df = get_vocabulary_analysis(story_english)
+
             # แสดงผล
             st.subheader("นิทานภาษาไทย")
             st.write(story_thai)
             st.subheader("นิทานภาษาอังกฤษ")
             st.write(story_english)
-
-             # เพิ่มฟังก์ชันในการค้นหาคำศัพท์ที่มีระดับความยาก A2 ขึ้นไป
-            vocabulary_prompt = f"Identify words in the following text that are at least A2 level and provide the following details: Word, Part of Speech, Thai translation:\n\n{story_english}"
-            response_vocab = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": vocabulary_prompt}]
-            )
-
-            vocabulary_data = response_vocab.choices[0].message.content
-
-            # แสดงคำศัพท์ในรูปแบบตาราง
-            vocab_list = []
-            for line in vocabulary_data.split("\n"):
-                if line.strip():  # กรองบรรทัดที่ไม่ใช่คำศัพท์
-                    word_info = line.split(",")  # สมมุติว่าเราจะแยกคำและข้อมูลในแต่ละบรรทัด
-                    if len(word_info) >= 3:  # ตรวจสอบว่าแต่ละบรรทัดมีข้อมูลครบ
-                        word = word_info[0].strip()
-                        part_of_speech = word_info[1].strip()
-                        thai_translation = word_info[2].strip()
-                        vocab_list.append({"Word": word, "Part of Speech": part_of_speech, "Thai Translation": thai_translation})
-
-            if vocab_list:
-                vocab_df = pd.DataFrame(vocab_list)
-                st.subheader("คำศัพท์น่ารู้")
-                st.dataframe(vocab_df)
+            st.subheader("คำศัพท์สำคัญ")
+            st.dataframe(vocab_df)
 
             # ดาวน์โหลดผลลัพธ์
             data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
-            csv = data.to_csv(index=False).encode("utf-8")
-            st.download_button("ดาวน์โหลดผลลัพธ์ (CSV) ภาษาไทย-อังกฤษ", data=csv, file_name="story.csv", mime="text/csv", key="download_story_csv")
-
+            story_csv = data.to_csv(index=False).encode("utf-8")
+            vocab_csv = vocab_df.to_csv(index=False).encode("utf-8")
+            st.download_button("ดาวน์โหลดผลลัพธ์นิทาน (CSV)", data=story_csv, file_name="story.csv", mime="text/csv")
+            st.download_button("ดาวน์โหลดคำศัพท์ (CSV)", data=vocab_csv, file_name="vocabulary.csv", mime="text/csv")
         except Exception as e:
             st.error(f"เกิดข้อผิดพลาด: {e}")
+
 
 

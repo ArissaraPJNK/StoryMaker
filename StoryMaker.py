@@ -56,7 +56,7 @@ if st.button("สร้างนิทาน"):
             csv = data.to_csv(index=False).encode("utf-8")
             st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")
 
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             st.error(f"เกิดข้อผิดพลาดจาก OpenAI API: {e}")
         except Exception as e:
             st.error(f"เกิดข้อผิดพลาด: {e}")

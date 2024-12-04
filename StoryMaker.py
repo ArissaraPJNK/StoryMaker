@@ -71,7 +71,7 @@ if st.button("สร้างนิทาน"):
 
             if vocab_list:
                 vocab_df = pd.DataFrame(vocab_list)
-                st.subheader("คำศัพท์ที่มีระดับความยาก A2 ขึ้นไป")
+                st.subheader("คำศัพท์น่ารู้")
                 st.dataframe(vocab_df)
 
             # ดาวน์โหลดผลลัพธ์

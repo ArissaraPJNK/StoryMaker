@@ -60,7 +60,7 @@ if st.button("สร้างนิทาน"):
                 for word, tag in pos_tags:
                     # ตัวอย่างการคัดกรอง (ปรับแต่งได้)
                     if len(word) > 3:  # สมมุติว่าใช้ความยาว > 3 เป็นตัวกรอง
-                        word_translation_prompt = f"Translate this English word into Thai: {word}"
+                        word_translation_prompt = f"Give the thai translation of the word like a direct transltor: {word}"
                         translation_response = client.chat.completions.create(
                             model="gpt-4o-mini",
                             messages=[{"role": "user", "content": word_translation_prompt}]

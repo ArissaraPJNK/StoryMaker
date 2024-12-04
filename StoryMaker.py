@@ -9,8 +9,8 @@ if api_key:
     client = OpenAI(api_key=api_key)
 
 # ส่วนหลักของแอป
-st.title("10-Line Story Generator")
-st.write("กรอกคีย์เวิร์ดเพื่อสร้างนิทาน 10 บรรทัด")
+st.title("นิทานฝึกภาษา")
+st.write("กรอกคีย์เวิร์ดเพื่อสร้างนิทาน 20 บรรทัด")
 
 # รับคีย์เวิร์ดจากผู้ใช้
 keywords = st.text_input("คีย์เวิร์ด (เช่น มังกร, เจ้าหญิง, ภูเขาไฟ):")
@@ -25,7 +25,7 @@ if st.button("สร้างนิทาน"):
         st.error("กรุณากรอก API Key ใน Sidebar")
     else:
         # Prompt สำหรับแต่งนิทาน
-        thai_prompt = f"เขียนนิทาน 10 บรรทัดโดยใช้คำต่อไปนี้: {keywords} และให้มีสไตล์ {style}"
+        thai_prompt = f"เขียนนิทานไม่เกิน 20 บรรทัดโดยใช้คำต่อไปนี้: {keywords} และให้มีสไตล์ {style} โดยนิทานต้องมีเนื้อเรื่องที่สมเหตุสมผล คำนึงถึงองค์ประกอบละครทั้ง 6 ของอริสโตเติล และใช้ภาษาที่สละสลวย"
 
         try:
             # เรียกใช้ ChatGPT API สำหรับนิทานภาษาไทย
@@ -57,3 +57,4 @@ if st.button("สร้างนิทาน"):
             st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")
         except Exception as e:
             st.error(f"เกิดข้อผิดพลาด: {e}")
+

@@ -34,7 +34,7 @@ if st.button("สร้างนิทาน"):
                 messages=[{"role": "user", "content": thai_prompt}]
             )
             # แก้ไขการเข้าถึงข้อมูลใน response
-            story_thai = response_thai.choices[0].message['content']
+            story_thai = response_thai.choices[0].message.content
 
             # Prompt สำหรับแปลภาษา
             english_prompt = f"Translate the following Thai story into English:\n\n{story_thai}"
@@ -43,7 +43,7 @@ if st.button("สร้างนิทาน"):
                 messages=[{"role": "user", "content": english_prompt}]
             )
             # แก้ไขการเข้าถึงข้อมูลใน response
-            story_english = response_english.choices[0].message['content']
+            story_english = response_english.choices[0].message.content
 
             # แสดงผล
             st.subheader("นิทานภาษาไทย")

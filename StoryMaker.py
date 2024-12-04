@@ -31,7 +31,7 @@ if st.button("สร้างนิทาน"):
         try:
             # เรียกใช้ ChatGPT API สำหรับนิทานภาษาไทย
             response_thai = client.chat.completions.create(
-                model="gpt-4o-",
+                model="gpt-4o-mini",
                 messages=[{"role": "user", "content": thai_prompt}]
             )
             story_thai = response_thai["choices"][0]["message"]["content"]
@@ -39,7 +39,7 @@ if st.button("สร้างนิทาน"):
             # Prompt สำหรับแปลภาษา
             english_prompt = f"Translate the following Thai story into English:\n\n{story_thai}"
             response_english = client.chat.completions.create(
-                model="gpt-4o-",
+                model="gpt-4o-mini",
                 messages=[{"role": "user", "content": english_prompt}]
             )
             story_english = response_english["choices"][0]["message"]["content"]

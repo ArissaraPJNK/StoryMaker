@@ -1,6 +1,7 @@
 import streamlit as st
 from openai import OpenAI
 import pandas as pd
+import nltk
 from nltk import pos_tag, word_tokenize
 from nltk.corpus import wordnet
 

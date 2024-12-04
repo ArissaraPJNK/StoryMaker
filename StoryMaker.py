@@ -33,8 +33,7 @@ if st.button("สร้างนิทาน"):
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": thai_prompt}]
             )
-            # แก้ไขการเข้าถึงข้อมูลใน response
-            story_thai = response_thai.choices[0].message.content
+            story_thai = response_thai.choices.[0].message.content
 
             # Prompt สำหรับแปลภาษา
             english_prompt = f"Translate the following Thai story into English:\n\n{story_thai}"
@@ -42,8 +41,7 @@ if st.button("สร้างนิทาน"):
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": english_prompt}]
             )
-            # แก้ไขการเข้าถึงข้อมูลใน response
-            story_english = response_english.choices[0].message.content
+            story_english = response_english.choices[0].message.content']
 
             # แสดงผล
             st.subheader("นิทานภาษาไทย")
@@ -79,7 +77,9 @@ if st.button("สร้างนิทาน"):
             # ดาวน์โหลดผลลัพธ์
             data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
             csv = data.to_csv(index=False).encode("utf-8")
-            st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")
+            st.download_button("ดาวน์โหลดผลลัพธ์ (CSV) ภาษาไทย-อังกฤษ", data=csv, file_name="story.csv", mime="text/csv", key="download_story_csv")
+
         except Exception as e:
             st.error(f"เกิดข้อผิดพลาด: {e}")
+
 

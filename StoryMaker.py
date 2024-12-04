@@ -80,11 +80,6 @@ if st.button("สร้างนิทาน"):
             data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
             csv = data.to_csv(index=False).encode("utf-8")
             st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")
-
-            # ดาวน์โหลดผลลัพธ์
-            data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
-            csv = data.to_csv(index=False).encode("utf-8")
-            st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")
         except Exception as e:
             st.error(f"เกิดข้อผิดพลาด: {e}")
 

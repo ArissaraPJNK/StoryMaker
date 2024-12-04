@@ -1,5 +1,5 @@
-import streamlit as st
 import openai
+import streamlit as st
 import pandas as pd
 
 # ตั้งค่า Sidebar
@@ -14,6 +14,8 @@ st.write("กรอกคีย์เวิร์ดเพื่อสร้า�
 
 # รับคีย์เวิร์ดจากผู้ใช้
 keywords = st.text_input("คีย์เวิร์ด (เช่น มังกร, เจ้าหญิง, ภูเขาไฟ):")
+
+# เพิ่มตัวเลือกสำหรับสไตล์นิทาน
 style = st.selectbox("เลือกสไตล์ของนิทาน", ["ตลก", "ดราม่า", "ผจญภัย"])
 
 if st.button("สร้างนิทาน"):
@@ -22,28 +24,28 @@ if st.button("สร้างนิทาน"):
     elif not api_key:
         st.error("กรุณากรอก API Key ใน Sidebar")
     else:
+        # Prompt สำหรับแต่งนิทาน
         thai_prompt = f"เขียนนิทาน 10 บรรทัดโดยใช้คำต่อไปนี้: {keywords} และให้มีสไตล์ {style}"
+
         try:
-            # สร้างนิทานภาษาไทย
-            response = openai.Completion.create(
-                model="gpt-4.0-mini",  # ใช้โมเดล gpt-4.0-mini
+            # เรียกใช้ ChatGPT API เพื่อแต่งนิทาน
+            response = openai.ChatCompletion.create(
+                model="gpt-4.0-mini",  # ใช้ gpt-4 หรือรุ่นที่คุณต้องการ
                 messages=[
-                    {"role": "system", "content": "คุณเป็นนักเขียนนิทาน"},
                     {"role": "user", "content": thai_prompt}
                 ]
             )
-            story_thai = response["choices"][0]["message"]["content"]
+            story_thai = response['choices'][0]['message']['content']
 
-            # แปลนิทานเป็นภาษาอังกฤษ
+            # Prompt สำหรับแปลภาษา
             english_prompt = f"Translate the following Thai story into English:\n\n{story_thai}"
-            response = openai.Completion.create(
-                model="gpt-4.0-mini",  # ใช้โมเดล gpt-4.0-mini
+            response = openai.ChatCompletion.create(
+                model="gpt-4.0-mini",  # ใช้ gpt-4
                 messages=[
-                    {"role": "system", "content": "You are a translator."},
                     {"role": "user", "content": english_prompt}
                 ]
             )
-            story_english = response["choices"][0]["message"]["content"]
+            story_english = response['choices'][0]['message']['content']
 
             # แสดงผล
             st.subheader("นิทานภาษาไทย")
@@ -51,7 +53,7 @@ if st.button("สร้างนิทาน"):
             st.subheader("นิทานภาษาอังกฤษ")
             st.write(story_english)
 
-            # ดาวน์โหลดผลลัพธ์เป็น CSV
+            # ดาวน์โหลดผลลัพธ์
             data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
             csv = data.to_csv(index=False).encode("utf-8")
             st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")

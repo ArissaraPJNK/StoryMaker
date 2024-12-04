@@ -58,7 +58,7 @@ if st.button("สร้างนิทาน"):
                 messages=[{"role": "user", "content": vocabulary_prompt}]
             )
 
-                vocabulary_data = response_vocab['choices'][0]['message']['content']
+            vocabulary_data = response_vocab['choices'][0]['message']['content']
 
             # แสดงคำศัพท์ในรูปแบบตาราง
             vocab_list = []

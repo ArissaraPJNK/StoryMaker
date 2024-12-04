@@ -4,7 +4,7 @@ import pandas as pd
 import nltk
 import os
 
-# ตั้งค่าโฟลเดอร์เก็บข้อมูล NLTK
+# ตั้งค่าโฟลเดอร์สำหรับการดาวน์โหลด NLTK
 nltk_data_path = os.path.expanduser("~/nltk_data")
 if not os.path.exists(nltk_data_path):
     os.makedirs(nltk_data_path)
@@ -17,7 +17,6 @@ nltk.download("averaged_perceptron_tagger", download_dir=nltk_data_path)
 
 from nltk import pos_tag, word_tokenize
 from nltk.corpus import wordnet
-
 
 # ตั้งค่า Sidebar
 st.sidebar.title("NLP Story Generator")
@@ -99,6 +98,7 @@ if st.button("สร้างนิทาน"):
             st.download_button("ดาวน์โหลดคำศัพท์ (CSV)", data=vocab_csv, file_name="vocabulary.csv", mime="text/csv")
         except Exception as e:
             st.error(f"เกิดข้อผิดพลาด: {e}")
+
 
 
 

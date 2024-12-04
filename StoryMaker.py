@@ -29,31 +29,30 @@ if st.button("สร้างนิทาน"):
         thai_prompt = f"เขียนนิทาน 10 บรรทัดโดยใช้คำต่อไปนี้: {keywords} และให้มีสไตล์ {style}"
 
         try:
-            # เรียกใช้ ChatGPT API สำหรับนิทานภาษาไทย
-            response_thai = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": thai_prompt}]
-            )
-            story_thai = response_thai["choices"][0]["message"]["content"]
+    # เรียกใช้ ChatGPT API สำหรับนิทานภาษาไทย
+    response_thai = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": thai_prompt}]
+    )
+    story_thai = response_thai.choices[0].message['content']
 
-            # Prompt สำหรับแปลภาษา
-            english_prompt = f"Translate the following Thai story into English:\n\n{story_thai}"
-            response_english = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": english_prompt}]
-            )
-            story_english = response_english["choices"][0]["message"]["content"]
+    # Prompt สำหรับแปลภาษา
+    english_prompt = f"Translate the following Thai story into English:\n\n{story_thai}"
+    response_english = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": english_prompt}]
+    )
+    story_english = response_english.choices[0].message['content']
 
-            # แสดงผล
-            st.subheader("นิทานภาษาไทย")
-            st.write(story_thai)
-            st.subheader("นิทานภาษาอังกฤษ")
-            st.write(story_english)
+    # แสดงผล
+    st.subheader("นิทานภาษาไทย")
+    st.write(story_thai)
+    st.subheader("นิทานภาษาอังกฤษ")
+    st.write(story_english)
 
-            # ดาวน์โหลดผลลัพธ์
-            data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
-            csv = data.to_csv(index=False).encode("utf-8")
-            st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")
-        except Exception as e:
-            st.error(f"เกิดข้อผิดพลาด: {e}")
-
+    # ดาวน์โหลดผลลัพธ์
+    data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
+    csv = data.to_csv(index=False).encode("utf-8")
+    st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")
+except Exception as e:
+    st.error(f"เกิดข้อผิดพลาด: {e}")

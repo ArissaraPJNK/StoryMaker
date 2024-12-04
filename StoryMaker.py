@@ -2,8 +2,9 @@ import streamlit as st
 from openai import OpenAI
 import pandas as pd
 import nltk
-nltk.download('punkt_tab')
-nltk.download('averaged_perceptron_tagger_eng')
+import re
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 from nltk import pos_tag, word_tokenize
 from nltk.corpus import wordnet
 
@@ -64,13 +65,16 @@ if st.button("สร้างนิทาน"):
                             model="gpt-4o-mini",
                             messages=[{"role": "user", "content": word_translation_prompt}]
                         )
+                        # ดึงคำแปลจากข้อความที่แปล
                         thai_translation = translation_response.choices[0].message.content
-                            if "translates to Thai as" in thai_translation:
+
+                        # ตัดข้อความที่ไม่ต้องการ
+                        # ขั้นแรก: ตัดประโยคที่ไม่ต้องการ (เช่น "This English word 'forest' translates to Thai as")
+                        if "translates to Thai as" in thai_translation:
                             thai_translation = thai_translation.split("translates to Thai as")[1].strip()
 
                         # ขั้นที่สอง: ตัดคำในวงเล็บ (เช่น "(pronounced: bpăa)")
-                            import re
-                            thai_translation = re.sub(r'\(.*\)', '', thai_translation).strip()
+                        thai_translation = re.sub(r'\(.*\)', '', thai_translation).strip()
 
                         vocabulary.append({"Word": word, "POS": tag, "Translation": thai_translation})
 
@@ -94,6 +98,7 @@ if st.button("สร้างนิทาน"):
             st.download_button("ดาวน์โหลดคำศัพท์ (CSV)", data=vocab_csv, file_name="vocabulary.csv", mime="text/csv")
         except Exception as e:
             st.error(f"เกิดข้อผิดพลาด: {e}")
+
 
 
 

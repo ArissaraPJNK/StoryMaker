@@ -2,19 +2,7 @@ import streamlit as st
 from openai import OpenAI
 import pandas as pd
 import nltk
-import os
-
-# ตั้งค่าโฟลเดอร์สำหรับการดาวน์โหลด NLTK
-nltk_data_path = os.path.expanduser("~/nltk_data")
-if not os.path.exists(nltk_data_path):
-    os.makedirs(nltk_data_path)
-
-nltk.data.path.append(nltk_data_path)
-
-# ดาวน์โหลดทรัพยากรที่จำเป็น
-nltk.download("punkt", download_dir=nltk_data_path)
-nltk.download("averaged_perceptron_tagger", download_dir=nltk_data_path)
-
+nltk.download('punkt_tab')
 from nltk import pos_tag, word_tokenize
 from nltk.corpus import wordnet
 

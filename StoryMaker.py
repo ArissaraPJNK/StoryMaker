@@ -26,7 +26,7 @@ if st.button("สร้างนิทาน"):
         try:
             # สร้างนิทานภาษาไทย
             response = openai.chat.completions.create(
-                model="gpt-40-mini",  # ใช้โมเดล gpt-4.0-mini
+                model="gpt-4o-mini",  # ใช้โมเดล gpt-4.0-mini
                 messages=[
                     {"role": "system", "content": "คุณเป็นนักเขียนนิทาน"},
                     {"role": "user", "content": thai_prompt}
@@ -37,7 +37,7 @@ if st.button("สร้างนิทาน"):
             # แปลนิทานเป็นภาษาอังกฤษ
             english_prompt = f"Translate the following Thai story into English:\n\n{story_thai}"
             response = openai.chat.completions.create(
-                model="gpt-40-mini",  # ใช้โมเดล gpt-4.0-mini
+                model="gpt-4o-mini",  # ใช้โมเดล gpt-4.0-mini
                 messages=[
                     {"role": "system", "content": "You are a translator."},
                     {"role": "user", "content": english_prompt}

@@ -41,7 +41,7 @@ if st.button("สร้างนิทาน"):
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": english_prompt}]
             )
-            story_english = response_english.choices[0].message.content']
+            story_english = response_english.choices[0].message.content
 
             # แสดงผล
             st.subheader("นิทานภาษาไทย")

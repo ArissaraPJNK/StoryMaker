@@ -65,6 +65,13 @@ if st.button("สร้างนิทาน"):
                             messages=[{"role": "user", "content": word_translation_prompt}]
                         )
                         thai_translation = translation_response.choices[0].message.content
+                        if "translates to Thai as" in thai_translation:
+                        thai_translation = thai_translation.split("translates to Thai as")[1].strip()
+
+                        # ขั้นที่สอง: ตัดคำในวงเล็บ (เช่น "(pronounced: bpăa)")
+                        import re
+                        thai_translation = re.sub(r'\(.*\)', '', thai_translation).strip()
+
                         vocabulary.append({"Word": word, "POS": tag, "Translation": thai_translation})
 
                 return pd.DataFrame(vocabulary)

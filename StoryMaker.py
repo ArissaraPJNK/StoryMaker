@@ -51,6 +51,36 @@ if st.button("สร้างนิทาน"):
             st.subheader("นิทานภาษาอังกฤษ")
             st.write(story_english)
 
+             # เพิ่มฟังก์ชันในการค้นหาคำศัพท์ที่มีระดับความยาก A2 ขึ้นไป
+            vocabulary_prompt = f"Identify words in the following text that are at least A2 level and provide the following details: Word, Part of Speech, Thai translation:\n\n{story_english}"
+            response_vocab = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": vocabulary_prompt}]
+            )
+
+            vocabulary_data = response_vocab.choices[0].message.content
+
+            # แสดงคำศัพท์ในรูปแบบตาราง
+            vocab_list = []
+            for line in vocabulary_data.split("\n"):
+                if line.strip():  # กรองบรรทัดที่ไม่ใช่คำศัพท์
+                    word_info = line.split(",")  # สมมุติว่าเราจะแยกคำและข้อมูลในแต่ละบรรทัด
+                    if len(word_info) >= 3:  # ตรวจสอบว่าแต่ละบรรทัดมีข้อมูลครบ
+                        word = word_info[0].strip()
+                        part_of_speech = word_info[1].strip()
+                        thai_translation = word_info[2].strip()
+                        vocab_list.append({"Word": word, "Part of Speech": part_of_speech, "Thai Translation": thai_translation})
+
+            if vocab_list:
+                vocab_df = pd.DataFrame(vocab_list)
+                st.subheader("คำศัพท์ที่มีระดับความยาก A2 ขึ้นไป")
+                st.dataframe(vocab_df)
+
+            # ดาวน์โหลดผลลัพธ์
+            data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
+            csv = data.to_csv(index=False).encode("utf-8")
+            st.download_button("ดาวน์โหลดผลลัพธ์ (CSV)", data=csv, file_name="story.csv", mime="text/csv")
+
             # ดาวน์โหลดผลลัพธ์
             data = pd.DataFrame({"ภาษาไทย": [story_thai], "ภาษาอังกฤษ": [story_english]})
             csv = data.to_csv(index=False).encode("utf-8")

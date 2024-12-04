@@ -29,21 +29,21 @@ if st.button("สร้างนิทาน"):
 
         try:
             # เรียกใช้ ChatGPT API สำหรับนิทานภาษาไทย
-            response_thai = client.chat.completions.create(
-                model="gpt-4o-mini",
+            response_thai = client.ChatCompletion.create(
+                model="gpt-4",
                 messages=[{"role": "user", "content": thai_prompt}]
             )
-            # แก้ไขการเข้าถึงข้อมูลใน response
-            story_thai = response_thai.choices[0].message['content']
+            # เข้าถึงเนื้อหาใน response
+            story_thai = response_thai["choices"][0]["message"]["content"]
 
             # Prompt สำหรับแปลภาษา
             english_prompt = f"Translate the following Thai story into English:\n\n{story_thai}"
-            response_english = client.chat.completions.create(
-                model="gpt-4o-mini",
+            response_english = client.ChatCompletion.create(
+                model="gpt-4",
                 messages=[{"role": "user", "content": english_prompt}]
             )
-            # แก้ไขการเข้าถึงข้อมูลใน response
-            story_english = response_english.choices[0].message['content']
+            # เข้าถึงเนื้อหาใน response
+            story_english = response_english["choices"][0]["message"]["content"]
 
             # แสดงผล
             st.subheader("นิทานภาษาไทย")
